@@ -1,0 +1,24 @@
+{
+  "name": "@jasongilbertuk/file-processor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jason-gilbert-uk/fileProcessor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jason-gilbert-uk/fileProcessor/issues"
+  },
+  "homepage": "https://github.com/jason-gilbert-uk/fileProcessor#readme",
+  "dependencies": {
+    "@jasongilbertuk/dynamo-helper": "^1.0.4",
+    "@jasongilbertuk/s3-helper": "^1.0.0",
+    "@jasongilbertuk/sqs-helper": "^1.0.5"
+  }
+}
