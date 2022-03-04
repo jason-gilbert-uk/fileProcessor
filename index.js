@@ -69,7 +69,7 @@ async function queueReader() {
 }
 
 
-async function run(dbConfigTableName,dbProductTableName,bucketName,queueName) {
+async function fileProcessor(dbConfigTableName,dbProductTableName,bucketName,queueName) {
     g_bucketName = bucketName
     var g_queueName = queueName
     var g_ConfigTableName = dbConfigTableName
@@ -82,4 +82,4 @@ async function run(dbConfigTableName,dbProductTableName,bucketName,queueName) {
     }
 }
 
-run(dbConfigTableName,dbProductTableName,bucketName,queueName);
+exports.fileProcessor = fileProcessor;
