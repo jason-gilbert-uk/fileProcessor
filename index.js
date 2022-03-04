@@ -71,9 +71,9 @@ async function queueReader() {
 
 async function fileProcessor(dbConfigTableName,dbProductTableName,bucketName,queueName) {
     g_bucketName = bucketName
-    var g_queueName = queueName
-    var g_ConfigTableName = dbConfigTableName
-    var g_productTableName = dbProductTableName
+    g_queueName = queueName
+    g_ConfigTableName = dbConfigTableName
+    g_productTableName = dbProductTableName
     try {
         queueReader();
 
