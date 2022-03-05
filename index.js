@@ -1,20 +1,19 @@
+const {readObjectFromSQS} = require('@jasongilbertuk/sqs-helper');
+const {writeItemToTable} = require('@jasongilbertuk/dynamo-helper');
+const {readObjectFromS3} = require('@jasongilbertuk/s3-helper');
+
 var g_bucketName;
 var g_queueName;
 var g_ConfigTableName;
 var g_productTableName;
 
-
-const {readObjectFromSQS} = require('@jasongilbertuk/sqs-helper');
-const {writeItemToTable} = require('@jasongilbertuk/dynamo-helper');
-const {readObjectFromS3} = require('@jasongilbertuk/s3-helper');
-
 async function processMessage(message) {
     try {
         var result = await writeItemToTable(g_productTableName,message);
-        console.log('writeItemToDB result: ',result)
         return result;
     } catch (err) {
-        console.log('error on writeItemToDB. Err = ',err)
+        console.log('fileProcessor encounted error on writeItemToTable. Err = ',err)
+        throw err;
     }
 }
 
@@ -22,49 +21,44 @@ async function processFile(msg) {
     const bucket = msg.bucket;
     const fileName = msg.file;
     var messages = await readObjectFromS3(bucket,fileName);
-    var messages2 = JSON.parse(messages.Body.toString('utf-8'));
-    console.log('messages length = ',messages2.length)
-    for (var i=0;i<messages2.length;i++) {
-        console.log('writing message #',i)
+    for (var i=0;i<messages.length;i++) {
         try {
-            var result = await processMessage(messages2[i]);
-            
+            var result = await processMessage(messages[i]);
         } catch (err) {
             console.log('error on call to processMessage. Err = ',err)
+            throw err
         }
     }
-    return "complete"
 }
 
 async function queueReader() {
-    
-    var result = undefined
     var start = new Date()
     var end = new Date();
     const TIMEOUT = 120000; // 2 minutes in milliseconds
     
-
+    // Basically, if we go for 2 minutes without receiving anything, processing ends.
     while(end-start < TIMEOUT) {
+        var result = undefined
         while (result === undefined && end-start < TIMEOUT) {
             result = await readObjectFromSQS(g_queueName)
             end = new Date();
             console.log(end-start);
         }
         if (result !== undefined) {
+            // Result is an array of messages
+            // [{bucket: 'name of bucket',file: 'name of file'}]
             const messages = result.Messages;
-            console.log('queue length = ',messages.length)
             for (var i=0; i< messages.length; i++) {
                 var msg = JSON.parse(messages[i].Body);
                 try {
-                    console.log('queue write #',i)
                     var result = await processFile(msg);
                 } catch(err) {
                     console.log('error on await processFile(msg): ',err)
+                    throw err;
                 }
             }
-            start = new Date(); 
+            start = new Date(); // Reset start time. This will allow another 2 minutes.
         }
-        result = undefined;
     }
 }
 
@@ -78,7 +72,8 @@ async function fileProcessor(dbConfigTableName,dbProductTableName,bucketName,que
         queueReader();
 
     } catch(err) {
-        console.log('Error encountered : ',err)
+        console.log('Error encountered in call to queueReader : ',err)
+        throw err;
     }
 }
 
