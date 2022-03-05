@@ -1,5 +1,5 @@
 const {readObjectFromSQS} = require('@jasongilbertuk/sqs-helper');
-const {writeItemToTable} = require('@jasongilbertuk/dynamo-helper');
+const {writeItemToProductTable} = require('@jasongilbertuk/product-table');
 const {readObjectFromS3} = require('@jasongilbertuk/s3-helper');
 
 var g_bucketName;
@@ -9,7 +9,7 @@ var g_productTableName;
 
 async function processMessage(message) {
     try {
-        var result = await writeItemToTable(g_productTableName,message);
+        var result = await writeItemToProductTable(g_productTableName,message);
         return result;
     } catch (err) {
         console.log('fileProcessor encounted error on writeItemToTable. Err = ',err)
