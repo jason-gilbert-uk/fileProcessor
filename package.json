@@ -1,6 +1,6 @@
 {
   "name": "@jasongilbertuk/file-processor",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "homepage": "https://github.com/jason-gilbert-uk/fileProcessor#readme",
   "dependencies": {
     "@jasongilbertuk/dynamo-helper": "^1.0.4",
-    "@jasongilbertuk/product-table": "^1.0.0",
+    "@jasongilbertuk/product-table": "^1.0.1",
     "@jasongilbertuk/s3-helper": "^1.0.1",
     "@jasongilbertuk/sqs-helper": "^1.0.5"
   }
