@@ -8,6 +8,21 @@ var g_ConfigTableName;
 var g_productTableName;
 
 async function processMessage(message) {
+    if (isNaN(message.price) || isNaN(message.clubcardPrice)) {
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log("*****************************")
+        console.log(message);
+    } 
+    else {
+      
     try {
         var result = await writeItemToProductTable(g_productTableName,message);
         return result;
@@ -15,6 +30,8 @@ async function processMessage(message) {
         console.log('fileProcessor encounted error on writeItemToTable. Err = ',err)
         throw err;
     }
+      
+}
 }
 
 async function processFile(msg) {
