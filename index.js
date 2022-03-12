@@ -8,7 +8,7 @@ var g_ConfigTableName;
 var g_productTableName;
 
 async function processMessage(message) {
-    if (isNaN(message.price) || isNaN(message.clubcardPrice)) {
+    if (isNaN(message.price) || isNaN(message.discountedPrice)) {
         console.log("*****************************")
         console.log("*****************************")
         console.log("*****************************")
